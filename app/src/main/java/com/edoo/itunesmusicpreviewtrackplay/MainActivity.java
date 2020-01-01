@@ -10,11 +10,13 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 
+import com.edoo.itunesmusicpreviewtrackplay.apiHelper.ApiHandler;
+import com.edoo.itunesmusicpreviewtrackplay.apiHelper.ITunesMusicListListener;
+import com.edoo.itunesmusicpreviewtrackplay.data.ITunesMusic;
 import com.edoo.itunesmusicpreviewtrackplay.ui.main.MainFragment;
 
-public class MainActivity extends AppCompatActivity {
-    private String TAG = "SPR";
-
+public class MainActivity extends AppCompatActivity implements ITunesMusicListListener {
+    private String TAG = MainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
                     .commitNow();
         }
         getSupportActionBar().setTitle(R.string.action_bar_title);
+
+        ApiHandler.getInstance().addGetITunesMusicListListener(this);
+
     }
 
     @Override
@@ -39,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onQueryTextSubmit(String text) {
                     Log.d(TAG, "keyword = " + text);
+                    ApiHandler.getInstance().getITunesMusicList(text);
                     return false;
                 }
 
@@ -52,5 +58,23 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ApiHandler.getInstance().removeGetITunesMusicListListener(this);
+    }
+
+    @Override
+    public void onSuccess(ITunesMusic[] ITunesMusics) {
+        for(ITunesMusic item:ITunesMusics) {
+            Log.d(TAG,item.previewUrl);
+        }
+    }
+
+    @Override
+    public void onFail(String message) {
+
     }
 }
