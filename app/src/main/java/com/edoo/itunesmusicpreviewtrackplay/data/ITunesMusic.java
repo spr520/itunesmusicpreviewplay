@@ -6,9 +6,9 @@ public class ITunesMusic {
 //    public int artistId;
 //    public int collectionId;
 //    public int trackId;
-//    public String artistName;
+    public String artistName;
 //    public String collectionName;
-//    public String trackName;
+    public String trackName;
 //    public String collectionCensoredName;
 //    public String trackCensoredName;
 //    public String artistViewUrl;
@@ -31,7 +31,7 @@ public class ITunesMusic {
 //    public String country;
 //    public String currency;
 //    public String primaryGenreName;
-//    public boolean isStreamable;
+    public boolean isStreamable;
 
     public ITunesMusic(String previewUrl, String artworkUrl100) {
         this.previewUrl = previewUrl;
