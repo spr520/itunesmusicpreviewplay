@@ -68,9 +68,9 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
 
     @Override
     public void onSuccess(ITunesMusic[] ITunesMusics) {
-        for(ITunesMusic item:ITunesMusics) {
-            Log.d(TAG,item.previewUrl);
-        }
+        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        if(fragment != null)
+            fragment.updateMusicList(ITunesMusics);
     }
 
     @Override

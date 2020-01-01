@@ -7,7 +7,7 @@ public class ITunesMusic {
 //    public int collectionId;
 //    public int trackId;
     public String artistName;
-//    public String collectionName;
+    public String collectionName;
     public String trackName;
 //    public String collectionCensoredName;
 //    public String trackCensoredName;
