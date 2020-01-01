@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ITunesMusicPreviewTrackPlay</string>
+    <string name="search_hint">type keyword to search</string>
+    <string name="action_bar_title">"iTunesMusic"</string>
 </resources>
