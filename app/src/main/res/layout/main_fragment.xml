@@ -12,12 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintBottom_toTopOf="@+id/ctrl_bar"
         app:layout_constraintTop_toTopOf="parent"
         tools:layout_editor_absoluteX="0dp" />
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ctrl_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -33,15 +33,22 @@
             android:id="@+id/ctrl_bar_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <LinearLayout
             android:id="@+id/ctrl_bar_track_layout"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/ctrl_bar_icon"
             android:paddingStart="@dimen/app_default_padding"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/ctrl_bar_icon"
+            app:layout_constraintEnd_toStartOf="@id/control_btn">
 
             <TextView
                 android:id="@+id/ctrl_bar_track_name"
@@ -63,13 +70,21 @@
 
         <ImageButton
             android:id="@+id/control_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="@dimen/app_default_padding"
+            android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
             android:foreground="?android:attr/selectableItemBackground"
-            android:layout_marginEnd="@dimen/app_default_padding"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"/>
-    </RelativeLayout>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+             />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

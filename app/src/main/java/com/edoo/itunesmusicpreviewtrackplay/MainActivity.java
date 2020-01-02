@@ -7,7 +7,6 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 
 import com.edoo.itunesmusicpreviewtrackplay.apiHelper.ApiHandler;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
             search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String text) {
-                    Log.d(TAG, "keyword = " + text);
                     ApiHandler.getInstance().getITunesMusicList(text);
                     return false;
                 }
