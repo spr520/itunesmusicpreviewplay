@@ -71,13 +71,14 @@ public class MainFragment extends Fragment {
                     // sluggish
                     mMediaplayer.reset();
                     mMediaplayer.setDataSource(music.previewUrl);
-                    mMediaplayer.prepare();
-                    mMediaplayer.start();
+                    mMediaplayer.prepareAsync();
 
                     Picasso.get().load(music.artworkUrl100).into(mCtrlBarIcon);
                     mCtrlBarTrackName.setText(music.trackName);
-                    mCtrlBarArtName.setText(music.collectionName + " " + music.artistName);
-                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+                    mCtrlBarArtName.setText(music.collectionName + ", " + music.artistName);
+                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
+                    mControlBtn.setEnabled(false);
+                    mControlBtn.setAlpha(0.5f);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -98,6 +99,23 @@ public class MainFragment extends Fragment {
                     mMediaplayer.start();
                     mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
                 }
+            }
+        });
+
+        mMediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
+            }
+        });
+
+        mMediaplayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mMediaplayer.start();
+                mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+                mControlBtn.setEnabled(true);
+                mControlBtn.setAlpha(1f);
             }
         });
     }

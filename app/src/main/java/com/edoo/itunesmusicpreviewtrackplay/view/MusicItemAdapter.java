@@ -60,7 +60,7 @@ public class MusicItemAdapter extends RecyclerView.Adapter implements View.OnCli
         MusicItemView vh = (MusicItemView) viewHolder;
 
         vh.setTrackName(music.trackName);
-        String label = music.collectionName + " " + music.artistName;
+        String label = music.collectionName + ", " + music.artistName;
         vh.setCollectionArtistName(label);
         vh.setIcon(music.artworkUrl100);
 
