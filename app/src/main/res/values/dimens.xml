@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="app_default_padding_half">8dp</dimen>
-    <dimen name="app_default_padding">20dp</dimen>
+    <dimen name="app_default_padding">8dp</dimen>
     <dimen name="app_default_paddingTop">25dp</dimen>
     <dimen name="app_default_paddingBottom">25dp</dimen>
+    <dimen name="app_default_paddingStart">24dp</dimen>
 
     <dimen name="app_default_margin">20dp</dimen>
     <dimen name="app_default_marginTop">25dp</dimen>

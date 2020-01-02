@@ -1,9 +1,5 @@
 package com.edoo.itunesmusicpreviewtrackplay.view;
 
-import android.content.res.Resources;
-import android.graphics.Color;
-import android.media.Image;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;

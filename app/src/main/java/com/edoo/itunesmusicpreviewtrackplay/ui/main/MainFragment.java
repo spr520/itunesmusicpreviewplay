@@ -2,6 +2,7 @@ package com.edoo.itunesmusicpreviewtrackplay.ui.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
+import android.media.Image;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -16,10 +17,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.edoo.itunesmusicpreviewtrackplay.R;
 import com.edoo.itunesmusicpreviewtrackplay.data.ITunesMusic;
 import com.edoo.itunesmusicpreviewtrackplay.view.MusicItemAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 
@@ -29,6 +35,11 @@ public class MainFragment extends Fragment {
     RecyclerView mRecyclerView;
     MusicItemAdapter mAdapter;
     MediaPlayer mMediaplayer;
+
+    ImageView mCtrlBarIcon;
+    TextView mCtrlBarTrackName;
+    TextView mCtrlBarArtName;
+    ImageButton mControlBtn;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -56,12 +67,18 @@ public class MainFragment extends Fragment {
                 try {
                     if(mMediaplayer.isPlaying()) {
                         mMediaplayer.stop();
-                        mMediaplayer.reset();
                     }
-
+                    // sluggish
+                    mMediaplayer.reset();
                     mMediaplayer.setDataSource(music.previewUrl);
                     mMediaplayer.prepare();
                     mMediaplayer.start();
+
+                    Picasso.get().load(music.artworkUrl100).into(mCtrlBarIcon);
+                    mCtrlBarTrackName.setText(music.trackName);
+                    mCtrlBarArtName.setText(music.collectionName + " " + music.artistName);
+                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -70,15 +87,33 @@ public class MainFragment extends Fragment {
         });
 
         findViews();
+
+        mControlBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(mMediaplayer.isPlaying()) {
+                    mMediaplayer.pause();
+                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
+                } else {
+                    mMediaplayer.start();
+                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+                }
+            }
+        });
     }
 
     private void findViews() {
-        mRecyclerView = getActivity().findViewById(R.id.recyclerview);
+        mRecyclerView = getActivity().findViewById(R.id.recycler_view);
         mRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRecyclerView.addItemDecoration(new DividerItemDecoration(mRecyclerView.getContext(), layoutManager.getOrientation()));
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAlpha(0);
+
+        mCtrlBarIcon = getActivity().findViewById(R.id.ctrl_bar_icon);
+        mCtrlBarTrackName = getActivity().findViewById(R.id.ctrl_bar_track_name);
+        mCtrlBarArtName = getActivity().findViewById(R.id.ctrl_bar_collection_artist_name);
+        mControlBtn = getActivity().findViewById(R.id.control_btn);
     }
 
     public void updateMusicList(final ITunesMusic[] ITunesMusics) {
