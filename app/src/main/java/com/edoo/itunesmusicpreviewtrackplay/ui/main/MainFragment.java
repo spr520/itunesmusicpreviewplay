@@ -43,7 +43,9 @@ public class MainFragment extends Fragment {
     ImageButton mControlBtn;
     LottieAnimationView mLoadingAnim;
     LottieAnimationView mNoDataAnim;
+    LottieAnimationView mNoNetworkAnim;
     CopyOnWriteArrayList<ITunesMusic> mITunesMusics = new CopyOnWriteArrayList<>();
+    boolean mHasNetwork = true;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -128,11 +130,19 @@ public class MainFragment extends Fragment {
                 clearRecyclerView();
                 mRecyclerView.setAlpha(0);
                 mNoDataAnim.setVisibility(View.INVISIBLE);
+                mNoNetworkAnim.setVisibility(View.INVISIBLE);
             }
 
             @Override
             public void onAnimationEnd(Animator animation) {
                 mLoadingAnim.setVisibility(View.INVISIBLE);
+                mAdapter.clear();
+                if(!mHasNetwork) {
+                    mAdapter.notifyDataSetChanged();
+                    mRecyclerView.setAlpha(0);
+                    showNoNetworkAnimation();
+                    return;
+                }
 
                 if (mITunesMusics.size() > 0) {
                     mRecyclerView.setAlpha(1);
@@ -140,11 +150,11 @@ public class MainFragment extends Fragment {
                     for (ITunesMusic item : mITunesMusics) {
                         mAdapter.addItem(item);
                     }
-                    mAdapter.notifyDataSetChanged();
                 } else {
                     mRecyclerView.setAlpha(0);
                     showNoDataAnimation();
                 }
+                mAdapter.notifyDataSetChanged();
 
             }
 
@@ -175,6 +185,7 @@ public class MainFragment extends Fragment {
 
         mLoadingAnim = getActivity().findViewById(R.id.loading_anim_view);
         mNoDataAnim = getActivity().findViewById(R.id.no_data_anim_view);
+        mNoNetworkAnim = getActivity().findViewById(R.id.no_network_anim_view);
     }
 
     public void startLoading() {
@@ -197,7 +208,7 @@ public class MainFragment extends Fragment {
         });
     }
 
-    public void showNoDataAnimation() {
+    private void showNoDataAnimation() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -206,7 +217,17 @@ public class MainFragment extends Fragment {
                 mNoDataAnim.playAnimation();
             }
         });
+    }
 
+    private void showNoNetworkAnimation() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mNoNetworkAnim.setVisibility(View.VISIBLE);
+                mNoNetworkAnim.setRepeatCount(0);
+                mNoNetworkAnim.playAnimation();
+            }
+        });
     }
 
 
@@ -226,6 +247,10 @@ public class MainFragment extends Fragment {
             mITunesMusics.add(item);
         }
         stopLoading();
+    }
+
+    public void notifyNetworkStatus(boolean hasNetWork) {
+        mHasNetwork = hasNetWork;
     }
 
 }

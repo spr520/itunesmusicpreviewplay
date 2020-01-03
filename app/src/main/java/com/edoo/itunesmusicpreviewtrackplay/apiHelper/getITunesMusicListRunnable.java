@@ -19,6 +19,7 @@ public class getITunesMusicListRunnable extends DataRequestRunnable {
 
     private ArrayList<ITunesMusicListListener> mListeners;
     private String mKeywords;
+    public static final String NO_NET_WORK = "noNetWork";
 
     public getITunesMusicListRunnable(ArrayList<ITunesMusicListListener> listeners, String keywords) {
         mListeners = listeners;
@@ -42,7 +43,7 @@ public class getITunesMusicListRunnable extends DataRequestRunnable {
             // TODO
             Log.d(TAG,"" +e);
             for(ITunesMusicListListener listener : mListeners) {
-                listener.onFail("exception");
+                listener.onFail(NO_NET_WORK);
             }
         }
 

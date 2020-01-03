@@ -11,6 +11,7 @@ import android.view.Menu;
 
 import com.edoo.itunesmusicpreviewtrackplay.apiHelper.ApiHandler;
 import com.edoo.itunesmusicpreviewtrackplay.apiHelper.ITunesMusicListListener;
+import com.edoo.itunesmusicpreviewtrackplay.apiHelper.getITunesMusicListRunnable;
 import com.edoo.itunesmusicpreviewtrackplay.data.ITunesMusic;
 import com.edoo.itunesmusicpreviewtrackplay.ui.main.MainFragment;
 
@@ -71,8 +72,10 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
     @Override
     public void onSuccess(ITunesMusic[] ITunesMusics) {
         MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.container);
-        if(fragment != null)
+        if(fragment != null) {
             fragment.updateMusicList(ITunesMusics);
+            fragment.notifyNetworkStatus(true);
+        }
     }
 
     @Override
@@ -81,6 +84,11 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
         if(fragment != null) {
             ITunesMusic[] ITunesMusics = new ITunesMusic[0];
             fragment.updateMusicList(ITunesMusics);
+
+            if(message.equals(getITunesMusicListRunnable.NO_NET_WORK)) {
+                fragment.notifyNetworkStatus(false);
+            }
+
         }
     }
 }
