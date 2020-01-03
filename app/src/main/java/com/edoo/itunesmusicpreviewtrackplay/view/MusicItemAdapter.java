@@ -29,12 +29,10 @@ public class MusicItemAdapter extends RecyclerView.Adapter implements View.OnCli
         this.mOnItemClickListener = listener;
     }
 
-    protected ArrayList<Integer> mLabelIndex;
     protected ArrayList<ITunesMusic> mItemList;
 
 
     public MusicItemAdapter() {
-        mLabelIndex = new ArrayList<>();
         mItemList = new ArrayList<>();
     }
 

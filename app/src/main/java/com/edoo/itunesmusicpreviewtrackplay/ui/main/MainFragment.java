@@ -35,7 +35,7 @@ public class MainFragment extends Fragment {
     private MainViewModel mViewModel;
     RecyclerView mRecyclerView;
     MusicItemAdapter mAdapter;
-    MediaPlayer mMediaplayer;
+    MediaPlayer mMediaPlayer;
 
     ImageView mCtrlBarIcon;
     TextView mCtrlBarTrackName;
@@ -63,7 +63,7 @@ public class MainFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         mViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 
-        mMediaplayer = new MediaPlayer();
+        mMediaPlayer = new MediaPlayer();
         mAdapter = new MusicItemAdapter();
 
         mAdapter.setOnItemClickListener(new MusicItemAdapter.OnItemClickListener() {
@@ -71,12 +71,12 @@ public class MainFragment extends Fragment {
             public void onItemClick(View view) {
                 ITunesMusic music = (ITunesMusic)view.getTag();
                 try {
-                    if(mMediaplayer.isPlaying()) {
-                        mMediaplayer.stop();
+                    if(mMediaPlayer.isPlaying()) {
+                        mMediaPlayer.stop();
                     }
-                    mMediaplayer.reset();
-                    mMediaplayer.setDataSource(music.previewUrl);
-                    mMediaplayer.prepareAsync();
+                    mMediaPlayer.reset();
+                    mMediaPlayer.setDataSource(music.previewUrl);
+                    mMediaPlayer.prepareAsync();
 
                     Picasso.get().load(music.artworkUrl100).into(mCtrlBarIcon);
                     mCtrlBarTrackName.setText(music.trackName);
@@ -98,27 +98,27 @@ public class MainFragment extends Fragment {
         mControlBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mMediaplayer.isPlaying()) {
-                    mMediaplayer.pause();
+                if(mMediaPlayer.isPlaying()) {
+                    mMediaPlayer.pause();
                     mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
                 } else {
-                    mMediaplayer.start();
+                    mMediaPlayer.start();
                     mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
                 }
             }
         });
 
-        mMediaplayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mediaPlayer) {
                 mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
             }
         });
 
-        mMediaplayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                mMediaplayer.start();
+                mMediaPlayer.start();
                 mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
                 mControlBtn.setEnabled(true);
                 mControlBtn.setAlpha(1f);
@@ -174,8 +174,8 @@ public class MainFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        if (mMediaplayer != null && mMediaplayer.isPlaying()) {
-            mMediaplayer.pause();
+        if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
+            mMediaPlayer.pause();
         }
         if (mControlBtn != null)
             mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
