@@ -81,6 +81,7 @@ public class MainFragment extends Fragment {
                     Picasso.get().load(music.artworkUrl100).into(mCtrlBarIcon);
                     mCtrlBarTrackName.setText(music.trackName);
                     mCtrlBarArtName.setText(music.collectionName + ", " + music.artistName);
+                    mControlBtn.setVisibility(View.VISIBLE);
                     mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
                     mControlBtn.setEnabled(false);
                     mControlBtn.setAlpha(0.5f);
@@ -168,6 +169,16 @@ public class MainFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mMediaplayer != null && mMediaplayer.isPlaying()) {
+            mMediaplayer.pause();
+        }
+        if (mControlBtn != null)
+            mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.play_arrow, null));
     }
 
     private void findViews() {

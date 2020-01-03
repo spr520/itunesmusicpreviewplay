@@ -116,6 +116,7 @@
             android:layout_marginBottom="8dp"
             android:background="@android:color/transparent"
             android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
