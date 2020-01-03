@@ -46,6 +46,7 @@ public class MainFragment extends Fragment {
     LottieAnimationView mNoNetworkAnim;
     CopyOnWriteArrayList<ITunesMusic> mITunesMusics = new CopyOnWriteArrayList<>();
     boolean mHasNetwork = true;
+    boolean mIsPause = false;
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -118,8 +119,10 @@ public class MainFragment extends Fragment {
         mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer) {
-                mMediaPlayer.start();
-                mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+                if (!mIsPause) {
+                    mMediaPlayer.start();
+                    mControlBtn.setImageDrawable(getActivity().getResources().getDrawable(R.drawable.pause, null));
+                }
                 mControlBtn.setEnabled(true);
                 mControlBtn.setAlpha(1f);
             }
@@ -172,8 +175,15 @@ public class MainFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mIsPause = false;
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
+        mIsPause = true;
         if (mMediaPlayer != null && mMediaPlayer.isPlaying()) {
             mMediaPlayer.pause();
         }
