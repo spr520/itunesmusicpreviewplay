@@ -41,6 +41,9 @@ public class getITunesMusicListRunnable extends DataRequestRunnable {
         } catch (IOException e) {
             // TODO
             Log.d(TAG,"" +e);
+            for(ITunesMusicListListener listener : mListeners) {
+                listener.onFail("exception");
+            }
         }
 
 

@@ -2,7 +2,7 @@ package com.edoo.itunesmusicpreviewtrackplay.ui.main;
 
 import androidx.lifecycle.ViewModelProviders;
 
-import android.media.Image;
+import android.animation.Animator;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
@@ -13,21 +13,22 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.airbnb.lottie.LottieAnimationView;
+import com.airbnb.lottie.LottieDrawable;
 import com.edoo.itunesmusicpreviewtrackplay.R;
 import com.edoo.itunesmusicpreviewtrackplay.data.ITunesMusic;
 import com.edoo.itunesmusicpreviewtrackplay.view.MusicItemAdapter;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class MainFragment extends Fragment {
 
@@ -40,6 +41,9 @@ public class MainFragment extends Fragment {
     TextView mCtrlBarTrackName;
     TextView mCtrlBarArtName;
     ImageButton mControlBtn;
+    LottieAnimationView mLoadingAnim;
+    LottieAnimationView mNoDataAnim;
+    CopyOnWriteArrayList<ITunesMusic> mITunesMusics = new CopyOnWriteArrayList<>();
 
     public static MainFragment newInstance() {
         return new MainFragment();
@@ -68,7 +72,6 @@ public class MainFragment extends Fragment {
                     if(mMediaplayer.isPlaying()) {
                         mMediaplayer.stop();
                     }
-                    // sluggish
                     mMediaplayer.reset();
                     mMediaplayer.setDataSource(music.previewUrl);
                     mMediaplayer.prepareAsync();
@@ -118,6 +121,43 @@ public class MainFragment extends Fragment {
                 mControlBtn.setAlpha(1f);
             }
         });
+
+        mLoadingAnim.addAnimatorListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                clearRecyclerView();
+                mRecyclerView.setAlpha(0);
+                mNoDataAnim.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mLoadingAnim.setVisibility(View.INVISIBLE);
+
+                if (mITunesMusics.size() > 0) {
+                    mRecyclerView.setAlpha(1);
+                    mAdapter.clear();
+                    for (ITunesMusic item : mITunesMusics) {
+                        mAdapter.addItem(item);
+                    }
+                    mAdapter.notifyDataSetChanged();
+                } else {
+                    mRecyclerView.setAlpha(0);
+                    showNoDataAnimation();
+                }
+
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+
+            }
+        });
     }
 
     private void findViews() {
@@ -132,25 +172,60 @@ public class MainFragment extends Fragment {
         mCtrlBarTrackName = getActivity().findViewById(R.id.ctrl_bar_track_name);
         mCtrlBarArtName = getActivity().findViewById(R.id.ctrl_bar_collection_artist_name);
         mControlBtn = getActivity().findViewById(R.id.control_btn);
+
+        mLoadingAnim = getActivity().findViewById(R.id.loading_anim_view);
+        mNoDataAnim = getActivity().findViewById(R.id.no_data_anim_view);
     }
 
-    public void updateMusicList(final ITunesMusic[] ITunesMusics) {
-        mAdapter.clear();
-        if (ITunesMusics.length > 0) {
-            mRecyclerView.setAlpha(1);
-        } else {
-            mRecyclerView.setAlpha(0);
-        }
+    public void startLoading() {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (ITunesMusic item : ITunesMusics) {
-                    mAdapter.addItem(item);
-                }
-                mAdapter.notifyDataSetChanged();
+                mLoadingAnim.setVisibility(View.VISIBLE);
+                mLoadingAnim.setRepeatCount(LottieDrawable.INFINITE);
+                mLoadingAnim.playAnimation();
+            }
+        });
+    }
+
+    public void stopLoading() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mLoadingAnim.setRepeatCount(0);
+            }
+        });
+    }
+
+    public void showNoDataAnimation() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mNoDataAnim.setVisibility(View.VISIBLE);
+                mNoDataAnim.setRepeatCount(0);
+                mNoDataAnim.playAnimation();
             }
         });
 
+    }
+
+
+    public void clearRecyclerView() {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mAdapter.clear();
+                mAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
+    public void updateMusicList(final ITunesMusic[] ITunesMusics) {
+        mITunesMusics.clear();
+        for(ITunesMusic item :ITunesMusics) {
+            mITunesMusics.add(item);
+        }
+        stopLoading();
     }
 
 }

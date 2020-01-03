@@ -43,6 +43,10 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
                 @Override
                 public boolean onQueryTextSubmit(String text) {
                     ApiHandler.getInstance().getITunesMusicList(text);
+                    MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+                    if (fragment != null) {
+                        fragment.startLoading();
+                    }
                     return false;
                 }
 
@@ -73,6 +77,10 @@ public class MainActivity extends AppCompatActivity implements ITunesMusicListLi
 
     @Override
     public void onFail(String message) {
-
+        MainFragment fragment = (MainFragment) getSupportFragmentManager().findFragmentById(R.id.container);
+        if(fragment != null) {
+            ITunesMusic[] ITunesMusics = new ITunesMusic[0];
+            fragment.updateMusicList(ITunesMusics);
+        }
     }
 }
